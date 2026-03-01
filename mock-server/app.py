@@ -32,7 +32,7 @@ def get_all_customers():
 
 @customers_bp.route('/customer/<int:user_id>')
 def get_customer(user_id):
-    customer = next((c for c in customers_json if c['id'] == user_id), None)
+    customer = next((c for c in customers_json if c['customer_id'] == user_id), None)
     if customer is None:
         abort(404)
     return jsonify({"data": customer})
