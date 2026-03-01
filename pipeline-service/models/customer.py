@@ -1,7 +1,5 @@
 from sqlalchemy import DECIMAL, TIMESTAMP, Column, Date, String, Text
-from sqlalchemy.ext.declarative import declarative_base
-
-Base = declarative_base()
+from database import Base
 
 class Customer(Base):
     __tablename__ = 'customers'
