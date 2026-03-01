@@ -1,14 +1,36 @@
-from flask import Blueprint, Flask
+from collections import OrderedDict
+from flask import Blueprint, Flask, jsonify, request
+import json
 
+with open('data/customers.json', 'r') as f:
+    customers_json = json.load(f)
+    
 app = Flask(__name__)
 
 customers_bp = Blueprint('customers', __name__)
 
 @customers_bp.route('/health')
-def status():
-    return {"status": "ok"}
+def server_status():
+    return jsonify({"status": "ok"})
+
+@customers_bp.route('/customers')
+def get_all_customers():
+    page = request.args.get('page', default=1, type=int)
+    limit = request.args.get('limit', default=10, type=int)
+    paginated_customers = customers_json[(page-1)*limit:limit*page]
+    return jsonify(OrderedDict([
+        ("data", paginated_customers),
+        ("total", len(customers_json)),
+        ("page", page),
+        ("limit", limit)
+    ]))
+
+@customers_bp.route('/customers/<int:user_id>')
+def get_customer(user_id):
+    return ""
+        
 
 app.register_blueprint(customers_bp, url_prefix='/api')
 
 if __name__ == '__main__':
-    app.run(port=5000)
+    app.run(debug=True, port=5000)
