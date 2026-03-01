@@ -1,5 +1,5 @@
 from collections import OrderedDict
-from flask import Blueprint, Flask, jsonify, request
+from flask import Blueprint, Flask, abort, jsonify, request
 import json
 
 try:
@@ -30,10 +30,12 @@ def get_all_customers():
         ("limit", limit)
     ]))
 
-@customers_bp.route('/customers/<int:user_id>')
+@customers_bp.route('/customer/<int:user_id>')
 def get_customer(user_id):
-    return ""
-        
+    customer = next((c for c in customers_json if c['id'] == user_id), None)
+    if customer is None:
+        abort(404)
+    return jsonify({"data": customer})
 
 app.register_blueprint(customers_bp, url_prefix='/api')
 
