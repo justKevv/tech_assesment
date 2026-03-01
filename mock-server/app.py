@@ -30,7 +30,7 @@ def get_all_customers():
         ("limit", limit)
     ]))
 
-@customers_bp.route('/customer/<int:user_id>')
+@customers_bp.route('/customers/<int:user_id>')
 def get_customer(user_id):
     customer = next((c for c in customers_json if c['customer_id'] == user_id), None)
     if customer is None:
