@@ -2,8 +2,13 @@ from collections import OrderedDict
 from flask import Blueprint, Flask, jsonify, request
 import json
 
-with open('data/customers.json', 'r') as f:
-    customers_json = json.load(f)
+try:
+    with open('data/customers.json', 'r') as f:
+        customers_json = json.load(f)
+except (FileNotFoundError, json.JSONDecodeError) as e:
+    print(f"Error loading customers: {e}")
+    customers_json = []
+
     
 app = Flask(__name__)
 
